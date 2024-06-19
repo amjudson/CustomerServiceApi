@@ -44,6 +44,13 @@ public class ApplicationDbContext(DbContextOptions options) : IdentityDbContext<
 	  modelBuilder.Entity<PersonType>().HasData(ReferenceTypesSeeding.GetPersonTypes());
 	  modelBuilder.Entity<PhoneType>().HasData(ReferenceTypesSeeding.GetPhoneTypes());
 	  modelBuilder.Entity<Race>().HasData(ReferenceTypesSeeding.GetRaces());
-	  modelBuilder.Entity<Person>().HasData(PeopleSeeding.GetPeople());
+	  modelBuilder.Entity<States>().HasData(StatesSeeding.Get());
+	  modelBuilder.Entity<Person>().HasData(PeopleSeeding.Get());
+	  modelBuilder.Entity<Address>().HasData(AddressSeeding.Get());
+	  modelBuilder.Entity<Phone>().HasData(PhoneSeeding.Get());
+	  modelBuilder.Entity<Email>().HasData(EmailSeeding.Get());
+		modelBuilder.Entity<PersonAddressLookup>().HasData(PersonAddressLookupSeeding.Get());
+		modelBuilder.Entity<PersonEmailLookup>().HasData(PersonEmailLookupSeeding.Get());
+		modelBuilder.Entity<PersonPhoneLookup>().HasData(PersonPhoneLookupSeeding.Get());
 	}
 }
