@@ -2,8 +2,8 @@
 public class PersonResponseDto
 {
 	public Person Person { get; set; }
-	public IEnumerable<Address> Addresses { get; set; }
-	public IEnumerable<Phone> Phones { get; set; }
-	public IEnumerable<Email> Emails { get; set; }
-	public IEnumerable<Appointment> Appointments { get; set; }
+	public List<AddressResponseDto> Addresses { get; set; }
+	public List<Phone> Phones { get; set; }
+	public List<Email> Emails { get; set; }
+	public List<Appointment> Appointments { get; set; }
 }

@@ -110,19 +110,19 @@ public class AuthController(
 			var result = await userManager.CreateAsync(newUser, model.Password);
 			if (result.Succeeded)
 			{
-				if (!await roleManager.RoleExistsAsync(SD.Role_Admin))
+				if (!await roleManager.RoleExistsAsync(StaticData.Role_Admin))
 				{
-					await roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
-					await roleManager.CreateAsync(new IdentityRole(SD.Role_Customer));
+					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_Admin));
+					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_User));
 				}
 
-				if (model.Role.ToLower() == SD.Role_Admin.ToLower())
+				if (model.Role.ToLower() == StaticData.Role_Admin.ToLower())
 				{
-					await userManager.AddToRoleAsync(newUser, SD.Role_Admin);
+					await userManager.AddToRoleAsync(newUser, StaticData.Role_Admin);
 				}
 				else
 				{
-					await userManager.AddToRoleAsync(newUser, SD.Role_Customer);
+					await userManager.AddToRoleAsync(newUser, StaticData.Role_User);
 				}
 
 				response.Result = new { UserId = newUser.Id };

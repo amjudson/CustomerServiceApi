@@ -18,7 +18,7 @@ public class AuthTestController : ControllerBase
   }
 
 	[HttpGet("{value:int}")]
-	[Authorize(Roles = SD.Role_Admin)]
+	[Authorize(Roles = StaticData.Role_Admin)]
 	public async Task<ActionResult<string>> GetSomething(int value)
 	{
 		return Ok("You are authorized with the Admin role!");
