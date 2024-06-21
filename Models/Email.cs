@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CustomerServiceApi.Models;
 
@@ -12,6 +13,7 @@ public class Email
 	public string EmailAddress { get; set; }
 	[Required]
 	public int EmailTypeId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("EmailTypeId")]
 	public EmailType EmailType { get; set; }
 }

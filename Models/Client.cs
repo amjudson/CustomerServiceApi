@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CustomerServiceApi.Models;
 
@@ -19,6 +20,7 @@ public class Client
 	public string EnteredBy { get; set; }
 	[Required]
 	public int ClientTypeId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("ClientTypeId")]
 	public ClientType ClientType { get; set; }
 }

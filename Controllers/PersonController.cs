@@ -43,33 +43,11 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 			Phones = [],
 			Emails = [],
 		};
-		var addresses = await db.PersonAddressLookups
+
+		personResponse.Addresses = await db.PersonAddressLookups
 			.Include(a => a.Address)
 			.Where(a => a.PersonId == personId)
 			.Select(a => a.Address).ToListAsync();
-
-
-		if (addresses.Any())
-		{
-			foreach (var addr in addresses)
-			{
-				var addressType = await db.AddressTypes.FirstAsync(a => a.AddressTypeId == addr.AddressTypeId);
-				var state = await db.States.FirstAsync(s => s.StateId == addr.StateId);
-				var addressDto = new AddressDto
-				{
-					AddressTypeId = addr.AddressId,
-					AddressType = addressType.Name,
-					AddressLine1 = addr.AddressLine1,
-					AddressLine2 = addr.AddressLine2,
-					City = addr.City,
-					State = state.Abbreviation,
-					AddressId = addr.AddressId,
-					Zip = addr.Zip,
-				};
-
-				personResponse.Addresses.Add(addressDto);
-			}
-		}
 
 		personResponse.Phones = await db.PersonPhoneLookups
 			.Include(a => a.Phone)

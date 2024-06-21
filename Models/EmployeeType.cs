@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CustomerServiceApi.Models;
 
@@ -14,6 +15,7 @@ public class EmployeeType
 	[MaxLength(50)]
 	public string Name { get; set; }
 	public Guid? ClientId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("ClientId")]
 	public Client Client { get; set; }
 }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +21,6 @@ public class AuthController(
 	UserManager<ApplicationUser> userManager,
 	RoleManager<IdentityRole> roleManager) : ControllerBase
 {
-	private readonly ApplicationDbContext db = db;
-	private readonly UserManager<ApplicationUser> userManager = userManager;
-	private readonly RoleManager<IdentityRole> roleManager = roleManager;
 	private readonly ApiResponse response = new();
 	private readonly string secretKey = config["AppSettings:Secret"];
 
@@ -113,6 +109,13 @@ public class AuthController(
 				if (!await roleManager.RoleExistsAsync(StaticData.Role_Admin))
 				{
 					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_Admin));
+				}
+				if (!await roleManager.RoleExistsAsync(StaticData.Role_Client_Admin))
+				{
+					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_Client_Admin));
+				}
+				if (!await roleManager.RoleExistsAsync(StaticData.Role_User))
+				{
 					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_User));
 				}
 

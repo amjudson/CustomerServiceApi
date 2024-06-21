@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CustomerServiceApi.Models;
 
@@ -14,6 +15,7 @@ public class Phone
 	public string Extension { get; set; }
 	[Required]
 	public int PhoneTypeId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("PhoneTypeId")]
 	public PhoneType PhoneType { get; set; }
 }
