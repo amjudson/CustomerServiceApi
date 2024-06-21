@@ -1,5 +1,5 @@
 ﻿namespace CustomerServiceApi.Models.Dto;
-public class AddressResponseDto
+public class AddressDto
 {
 	public int AddressId { get; set; }
 	public string AddressLine1 { get; set; }

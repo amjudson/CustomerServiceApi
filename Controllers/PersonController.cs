@@ -27,38 +27,35 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 	public async Task<ActionResult<ApiResponse>> GetPersonById(int personId)
 	{
 		var person = await db.People
-			.Include(p => p.Client)
-			.Include(p => p.Gender)
-			.Include(p => p.Race)
 			.FirstOrDefaultAsync(p => p.PersonId == personId);
 		if (person == null)
 		{
-			response.ErrorMessages.Add("Person not found");
+			response.ErrorMessages.Add($"Person with id '{personId}' not found");
 			response.Success = false;
 			response.StatusCode = HttpStatusCode.NotFound;
 			return NotFound(response);
 		}
 
-		var personResponse = new PersonResponseDto
+		var personResponse = new PersonDto
 		{
-			Person = new Person(),
+			Person = person,
 			Addresses = [],
 			Phones = [],
 			Emails = [],
 		};
-		var addresses = db.PersonAddressLookups
+		var addresses = await db.PersonAddressLookups
 			.Include(a => a.Address)
 			.Where(a => a.PersonId == personId)
-			.Select(a => a.Address);
+			.Select(a => a.Address).ToListAsync();
 
 
 		if (addresses.Any())
 		{
 			foreach (var addr in addresses)
 			{
-				var addressType = db.AddressTypes.First(a => a.AddressTypeId == addr.AddressTypeId);
-				var state = db.States.First(s => s.StateId == addr.StateId);
-				var addressDto = new AddressResponseDto
+				var addressType = await db.AddressTypes.FirstAsync(a => a.AddressTypeId == addr.AddressTypeId);
+				var state = await db.States.FirstAsync(s => s.StateId == addr.StateId);
+				var addressDto = new AddressDto
 				{
 					AddressTypeId = addr.AddressId,
 					AddressType = addressType.Name,
@@ -74,15 +71,15 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 			}
 		}
 
-		var phones = db.PersonPhoneLookups
+		personResponse.Phones = await db.PersonPhoneLookups
 			.Include(a => a.Phone)
 			.Where(a => a.PersonId == personId)
-			.Select(a => a.Phone);
+			.Select(a => a.Phone).ToListAsync();
 
-		var emails = db.PersonEmailLookups
+		personResponse.Emails = await db.PersonEmailLookups
 			.Include(a => a.Email)
 			.Where(a => a.PersonId == personId)
-			.Select(a => a.Email);
+			.Select(a => a.Email).ToListAsync();
 
 
 		response.Result = personResponse;
