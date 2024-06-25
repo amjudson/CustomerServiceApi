@@ -14,60 +14,60 @@ public class AddressController(ApplicationDbContext db) : ControllerBase
 
 	[HttpGet("GetAddresses", Name = "GetAddresses")]
 	public async Task<ActionResult<ApiResponse>> GetAddresses()
-    {
-        response.Result = await db.Addresses.ToListAsync();
-        response.Success = true;
-        response.StatusCode = HttpStatusCode.OK;
-        return Ok(response);
-    }
+	{
+		response.Result = await db.Addresses.ToListAsync();
+		response.Success = true;
+		response.StatusCode = HttpStatusCode.OK;
+		return Ok(response);
+	}
 
 	[HttpGet("GetAddressById/{addressId:int}", Name = "GetAddressById")]
 	public async Task<ActionResult<ApiResponse>> GetAddressById(int addressId)
-    {
-        var address = await db.Addresses.FirstOrDefaultAsync(a => a.AddressId == addressId);
-        if (address == null)
-        {
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.BadRequest;
-            response.ErrorMessages.Add($"Address '{addressId}' not found");
-            return BadRequest(response);
-        }
+	{
+		var address = await db.Addresses.FirstOrDefaultAsync(a => a.AddressId == addressId);
+		if (address == null)
+		{
+			response.Success = false;
+			response.StatusCode = HttpStatusCode.BadRequest;
+			response.ErrorMessages.Add($"Address '{addressId}' not found");
+			return BadRequest(response);
+		}
 
-        response.Result = address;
-        response.StatusCode = HttpStatusCode.OK;
-        return Ok(response);
-    }
+		response.Result = address;
+		response.StatusCode = HttpStatusCode.OK;
+		return Ok(response);
+	}
 
 	[HttpGet("GetAddressesForPersonId/{personId:int}", Name = "GetAddressesForPersonId")]
 	public async Task<ActionResult<ApiResponse>> GetAddressesForPersonId(int personId)
-    {
-        var addressMaps = await db.PersonAddressLookups
-	        .Where(a => a.PersonId == personId)
-	        .Select(a => a.AddressId)
-	        .ToListAsync();
-        if (addressMaps.Count == 0)
-        {
-            response.Success = false;
-            response.StatusCode = HttpStatusCode.BadRequest;
-            response.ErrorMessages.Add($"No addresses found for Person '{personId}'");
-            return BadRequest(response);
-        }
+	{
+		var addressMaps = await db.PersonAddressLookups
+			.Where(a => a.PersonId == personId)
+			.Select(a => a.AddressId)
+			.ToListAsync();
+		if (addressMaps.Count == 0)
+		{
+			response.Success = false;
+			response.StatusCode = HttpStatusCode.BadRequest;
+			response.ErrorMessages.Add($"No addresses found for Person '{personId}'");
+			return BadRequest(response);
+		}
 
-        var addressList = new List<Address>();
-        foreach (var addressId in addressMaps)
-        {
-	        var address = await db.Addresses.FirstOrDefaultAsync(a => a.AddressId == addressId);
-            if (address != null)
-            {
-                addressList.Add(address);
-            }
-        }
+		var addressList = new List<Address>();
+		foreach (var addressId in addressMaps)
+		{
+			var address = await db.Addresses.FirstOrDefaultAsync(a => a.AddressId == addressId);
+			if (address != null)
+			{
+				addressList.Add(address);
+			}
+		}
 
-        response.Result = addressList;
-        response.StatusCode = HttpStatusCode.OK;
-        response.Success = true;
-        return Ok(response);
-    }
+		response.Result = addressList;
+		response.StatusCode = HttpStatusCode.OK;
+		response.Success = true;
+		return Ok(response);
+	}
 
 	[HttpPut("PutAddress/{addressId:int}", Name = "PutAddress")]
 	public async Task<ActionResult<ApiResponse>> PutAddress(int addressId, [FromBody] Address address)
@@ -126,7 +126,7 @@ public class AddressController(ApplicationDbContext db) : ControllerBase
 			response.Result = newAddress;
 			response.StatusCode = HttpStatusCode.Created;
 			response.Success = true;
-			return CreatedAtRoute("GetAddressById", new { addressId = newAddress.AddressId }, response);
+			return CreatedAtRoute("GetAddressById", new {addressId = newAddress.AddressId}, response);
 		}
 		catch (Exception e)
 		{

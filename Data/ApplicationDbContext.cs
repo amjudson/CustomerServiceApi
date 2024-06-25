@@ -15,6 +15,9 @@ public class ApplicationDbContext(DbContextOptions options) : IdentityDbContext<
 	public DbSet<Client> Clients { get; set; }
 	public DbSet<ClientFeature> ClientFeatures { get; set; }
 	public DbSet<ClientFeatureLookup> ClientFeatureLookups { get; set; }
+	public DbSet<ClientAddressLookup> ClientAddressLookups { get; set; }
+	public DbSet<ClientEmailLookup> ClientEmailLookups { get; set; }
+	public DbSet<ClientPhoneLookup> ClientPhoneLookups { get; set; }
 	public DbSet<ClientType> ClientTypes { get; set; }
 	public DbSet<Email> Emails { get; set; }
 	public DbSet<EmailType> EmailTypes { get; set; }
