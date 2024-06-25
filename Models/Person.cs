@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CustomerServiceApi.Models;
 
@@ -21,6 +22,7 @@ public class Person
 	public string Prefix { get; set; }
 	[Required]
 	public int PersonTypeId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("PersonTypeId")]
 	public PersonType PersonType { get; set; }
 	[Required]
@@ -28,16 +30,19 @@ public class Person
 	public string Alias { get; set; }
 	[Required]
 	public int RaceId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("RaceId")]
 	public Race Race { get; set; }
 	[Required]
 	public DateTime DateOfBirth { get; set; }
 	[Required]
 	public Guid ClientId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("ClientId")]
 	public Client Client { get; set; }
 	[Required]
 	public int GenderId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("GenderId")]
 	public Gender Gender { get; set; }
 }

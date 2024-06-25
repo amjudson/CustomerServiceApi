@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +21,8 @@ public class AuthController(
 	UserManager<ApplicationUser> userManager,
 	RoleManager<IdentityRole> roleManager) : ControllerBase
 {
-	private readonly ApplicationDbContext db = db;
-	private readonly UserManager<ApplicationUser> userManager = userManager;
-	private readonly RoleManager<IdentityRole> roleManager = roleManager;
-	private ApiResponse response = new();
-	private string secretKey = config["AppSettings:Secret"];
+	private readonly ApiResponse response = new();
+	private readonly string secretKey = config["AppSettings:Secret"];
 
 	[HttpPost("login")]
 	public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
@@ -110,19 +106,30 @@ public class AuthController(
 			var result = await userManager.CreateAsync(newUser, model.Password);
 			if (result.Succeeded)
 			{
-				if (!await roleManager.RoleExistsAsync(SD.Role_Admin))
+				if (!await roleManager.RoleExistsAsync(StaticData.Role_Admin))
 				{
-					await roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
-					await roleManager.CreateAsync(new IdentityRole(SD.Role_Customer));
+					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_Admin));
+				}
+				if (!await roleManager.RoleExistsAsync(StaticData.Role_Client_Admin))
+				{
+					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_Client_Admin));
+				}
+				if (!await roleManager.RoleExistsAsync(StaticData.Role_User))
+				{
+					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_User));
 				}
 
-				if (model.Role.ToLower() == SD.Role_Admin.ToLower())
+				switch (model.Role)
 				{
-					await userManager.AddToRoleAsync(newUser, SD.Role_Admin);
-				}
-				else
-				{
-					await userManager.AddToRoleAsync(newUser, SD.Role_Customer);
+					case StaticData.Role_Admin:
+						await userManager.AddToRoleAsync(newUser, StaticData.Role_Admin);
+						break;
+					case StaticData.Role_Client_Admin:
+						await userManager.AddToRoleAsync(newUser, StaticData.Role_Client_Admin);
+						break;
+					default:
+						await userManager.AddToRoleAsync(newUser, StaticData.Role_User);
+						break;
 				}
 
 				response.Result = new { UserId = newUser.Id };

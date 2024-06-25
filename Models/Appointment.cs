@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CustomerServiceApi.Models;
 
@@ -14,6 +15,7 @@ public class Appointment
 	public string Description { get; set; }
 	[Required]
 	public int AppointmentTypeId { get; set; }
+	[JsonIgnore]
 	[ForeignKey("AppointmentTypeId")]
 	public AppointmentType AppointmentType { get; set; }
 	[Required]
