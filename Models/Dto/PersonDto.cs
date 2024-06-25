@@ -5,5 +5,5 @@ public class PersonDto
 	public List<Address> Addresses { get; set; }
 	public List<Phone> Phones { get; set; }
 	public List<Email> Emails { get; set; }
-	public List<Appointment> Appointments { get; set; }
+	// public List<Appointment> Appointments { get; set; }
 }
