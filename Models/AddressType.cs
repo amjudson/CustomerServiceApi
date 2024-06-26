@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -18,5 +19,7 @@ public class AddressType
 	[Required]
 	[MaxLength(50)]
 	public string Name { get; set; }
+	[DefaultValue(false)]
+	public bool ClientOption { get; set; }
 }
 
