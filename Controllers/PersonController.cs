@@ -110,11 +110,26 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 					db.Addresses.Add(address);
 					await db.SaveChangesAsync();
 				}
-				db.PersonAddressLookups.Add(new PersonAddressLookup
+				else
 				{
-					PersonId = person.PersonId,
-					AddressId = address.AddressId
-				});
+					existingAddress.AddressLine1 = address.AddressLine1;
+					existingAddress.AddressLine2 = address.AddressLine2;
+					existingAddress.AddressTypeId = address.AddressTypeId;
+					existingAddress.City = address.City;
+					existingAddress.StateId = address.StateId;
+					existingAddress.Zip = address.Zip;
+					await db.SaveChangesAsync();
+				}
+
+				if (!await db.PersonAddressLookups
+					    .AnyAsync(a => a.PersonId == person.PersonId && a.AddressId == address.AddressId))
+				{
+					db.PersonAddressLookups.Add(new PersonAddressLookup
+					{
+						PersonId = person.PersonId,
+						AddressId = address.AddressId
+					});
+				}
 
 				responsePersonDto.Addresses.Add(address);
 			}
@@ -128,11 +143,22 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 					db.Phones.Add(phone);
 					await db.SaveChangesAsync();
 				}
-				db.PersonPhoneLookups.Add(new PersonPhoneLookup
+				else
 				{
-					PersonId = person.PersonId,
-					PhoneId = phone.PhoneId
-				});
+					existingPhone.PhoneNumber = phone.PhoneNumber;
+					existingPhone.PhoneTypeId = phone.PhoneTypeId;
+					await db.SaveChangesAsync();
+				}
+
+				if (!await db.PersonPhoneLookups
+					    .AnyAsync(a => a.PersonId == person.PersonId && a.PhoneId == phone.PhoneId))
+				{
+					db.PersonPhoneLookups.Add(new PersonPhoneLookup
+					{
+						PersonId = person.PersonId,
+						PhoneId = phone.PhoneId
+					});
+				}
 
 				responsePersonDto.Phones.Add(phone);
 			}
@@ -146,11 +172,22 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 					db.Emails.Add(email);
 					await db.SaveChangesAsync();
 				}
-				db.PersonEmailLookups.Add(new PersonEmailLookup
+				else
 				{
-					PersonId = person.PersonId,
-					EmailId = email.EmailId
-				});
+					existingEmail.EmailAddress = email.EmailAddress;
+					existingEmail.EmailTypeId = email.EmailTypeId;
+					await db.SaveChangesAsync();
+				}
+
+				if (!await db.PersonEmailLookups
+					    .AnyAsync(a => a.PersonId == person.PersonId && a.EmailId == email.EmailId))
+				{
+					db.PersonEmailLookups.Add(new PersonEmailLookup
+					{
+						PersonId = person.PersonId,
+						EmailId = email.EmailId
+					});
+				}
 
 				responsePersonDto.Emails.Add(email);
 			}
@@ -160,14 +197,14 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 			response.Result = responsePersonDto;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.Created;
-			return CreatedAtRoute("GetPersonById", new { personId = person.PersonId }, response);
+			return CreatedAtRoute("GetPersonById", new {personId = person.PersonId}, response);
 		}
 		catch (Exception e)
 		{
 			response.ErrorMessages.Add(e.Message);
 			response.Success = false;
 			response.StatusCode = HttpStatusCode.InternalServerError;
-			return StatusCode((int)HttpStatusCode.InternalServerError, response);
+			return StatusCode((int) HttpStatusCode.InternalServerError, response);
 		}
 	}
 
@@ -220,7 +257,8 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 							PersonId = person.PersonId,
 							AddressId = address.AddressId
 						});
-					} else
+					}
+					else
 					{
 						existingAddress.AddressLine1 = address.AddressLine1;
 						existingAddress.AddressLine2 = address.AddressLine2;
@@ -249,7 +287,8 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 							PersonId = person.PersonId,
 							PhoneId = phone.PhoneId
 						});
-					} else
+					}
+					else
 					{
 						existingPhone.PhoneTypeId = phone.PhoneTypeId;
 						existingPhone.PhoneNumber = phone.PhoneNumber;
@@ -275,7 +314,8 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 							PersonId = person.PersonId,
 							EmailId = email.EmailId
 						});
-					} else
+					}
+					else
 					{
 						existingEmail.EmailTypeId = email.EmailId;
 						existingEmail.EmailAddress = email.EmailAddress;

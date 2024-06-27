@@ -13,28 +13,38 @@ public class ReferenceTypesSeeding
 				AddressTypeId = 1,
 				Description = "Home",
 				Name = "Home",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new AddressType
 			{
 				AddressTypeId = 2,
 				Description = "Work",
 				Name = "Work",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new AddressType
 			{
 				AddressTypeId = 3,
 				Description = "Vacation",
 				Name = "Vacation",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new AddressType
 			{
 				AddressTypeId = 4,
 				Description = "Other",
 				Name = "Other",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+			},
+			new AddressType
+			{
+				AddressTypeId = 5,
+				Name = "Main Office",
+				Description = "Main Office address",
+				ClientOption = true,
+			},
+			new AddressType
+			{
+				AddressTypeId = 6,
+				Name = "Branch Office",
+				Description = "Branch Office address",
+				ClientOption = true,
 			},
 		];
 	}
@@ -62,28 +72,59 @@ public class ReferenceTypesSeeding
 				EmailTypeId = 1,
 				Description = "Home",
 				Name = "Home",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new EmailType
 			{
 				EmailTypeId = 2,
 				Description = "Work",
 				Name = "Work",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new EmailType
 			{
 				EmailTypeId = 3,
 				Description = "Junk",
 				Name = "Junk",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new EmailType
 			{
 				EmailTypeId = 4,
 				Description = "Other",
 				Name = "Other",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+			},
+			new EmailType
+			{
+				EmailTypeId = 5,
+				Name = "Support",
+				Description = "Support Department",
+				ClientOption = true,
+			},
+			new EmailType
+			{
+				EmailTypeId = 6,
+				Name = "Receiving",
+				Description = "Receiving Department",
+				ClientOption = true,
+			},
+			new EmailType
+			{
+				EmailTypeId = 7,
+				Name = "Sales",
+				Description = "Sales Department",
+				ClientOption = true,
+			},
+			new EmailType
+			{
+				EmailTypeId = 8,
+				Name = "Service",
+				Description = "Service Department",
+				ClientOption = true,
+			},
+			new EmailType
+			{
+				EmailTypeId = 9,
+				Name = "Legal",
+				Description = "Legal Department",
+				ClientOption = true,
 			},
 		];
 	}
@@ -220,28 +261,73 @@ public class ReferenceTypesSeeding
 				PhoneTypeId = 1,
 				Description = "Cell",
 				Name = "Cell",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new PhoneType
 			{
 				PhoneTypeId = 2,
 				Description = "Work",
 				Name = "Work",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new PhoneType
 			{
 				PhoneTypeId = 3,
 				Description = "Home",
 				Name = "Home",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
 			},
 			new PhoneType
 			{
 				PhoneTypeId = 4,
 				Description = "Other",
 				Name = "Other",
-				ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+			},
+			new PhoneType
+			{
+				PhoneTypeId = 5,
+				Name = "Receiving",
+				Description = "Receiving Department",
+				ClientOption = true,
+			},
+			new PhoneType
+			{
+				PhoneTypeId = 6,
+				Name = "Accounting",
+				Description = "Accounting Department",
+				ClientOption = true,
+			},
+			new PhoneType
+			{
+				PhoneTypeId = 7,
+				Name = "Legal",
+				Description = "Legal Department",
+				ClientOption = true,
+			},
+			new PhoneType
+			{
+				PhoneTypeId = 8,
+				Name = "Sales",
+				Description = "Sales Department",
+				ClientOption = true,
+			},
+			new PhoneType
+			{
+				PhoneTypeId = 9,
+				Name = "Service",
+				Description = "Service Department",
+				ClientOption = true,
+			},
+			new PhoneType
+			{
+				PhoneTypeId = 10,
+				Name = "Engineering",
+				Description = "Engineering Department",
+				ClientOption = true,
+			},
+			new PhoneType
+			{
+				PhoneTypeId = 11,
+				Name = "Other ...To be added",
+				Description = "Other - place holder until the true name is added",
+				ClientOption = true,
 			},
 		];
 	}

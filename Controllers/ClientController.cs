@@ -4,7 +4,7 @@ using CustomerServiceApi.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-// using System.Security.Claims;
+using System.Security.Claims;
 
 namespace CustomerServiceApi.Controllers;
 
@@ -209,6 +209,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			return BadRequest(response);
 		}
 
+		var user = User.FindFirstValue(ClaimTypes.Name);
 		var responseClient = new ClientDto
 		{
 			Client = new Client(),
