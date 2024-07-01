@@ -4,7 +4,6 @@ using CustomerServiceApi.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using System.Security.Claims;
 
 namespace CustomerServiceApi.Controllers;
 
@@ -17,7 +16,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetClientList", Name = "GetClientList")]
 	public async Task<ActionResult<ApiResponse>> GetClientList()
 	{
-		response.Result = await db.Clients.ToListAsync();
+		response.Data = await db.Clients.Where(c => c.Active).ToListAsync();
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -58,7 +57,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			.Where(a => a.ClientId == clientId)
 			.Select(a => a.Email).ToListAsync();
 
-		response.Result = clientResponse;
+		response.Data = clientResponse;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
 	}
@@ -183,7 +182,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			}
 
 			await db.SaveChangesAsync();
-			response.Result = responseClient;
+			response.Data = responseClient;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.Created;
 			return CreatedAtRoute("GetClientById", new { clientId = client.ClientId }, response);
@@ -209,7 +208,6 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			return BadRequest(response);
 		}
 
-		var user = User.FindFirstValue(ClaimTypes.Name);
 		var responseClient = new ClientDto
 		{
 			Client = new Client(),
@@ -317,7 +315,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			}
 
 			await db.SaveChangesAsync();
-			response.Result = responseClient;
+			response.Data = responseClient;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);

@@ -15,7 +15,7 @@ public class AddressController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetAddresses", Name = "GetAddresses")]
 	public async Task<ActionResult<ApiResponse>> GetAddresses()
 	{
-		response.Result = await db.Addresses.ToListAsync();
+		response.Data = await db.Addresses.ToListAsync();
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -33,7 +33,7 @@ public class AddressController(ApplicationDbContext db) : ControllerBase
 			return BadRequest(response);
 		}
 
-		response.Result = address;
+		response.Data = address;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
 	}
@@ -63,7 +63,7 @@ public class AddressController(ApplicationDbContext db) : ControllerBase
 			}
 		}
 
-		response.Result = addressList;
+		response.Data = addressList;
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -91,7 +91,7 @@ public class AddressController(ApplicationDbContext db) : ControllerBase
 		try
 		{
 			await db.SaveChangesAsync();
-			response.Result = dbAddress;
+			response.Data = dbAddress;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);
@@ -123,7 +123,7 @@ public class AddressController(ApplicationDbContext db) : ControllerBase
 		{
 			await db.Addresses.AddAsync(newAddress);
 			await db.SaveChangesAsync();
-			response.Result = newAddress;
+			response.Data = newAddress;
 			response.StatusCode = HttpStatusCode.Created;
 			response.Success = true;
 			return CreatedAtRoute("GetAddressById", new {addressId = newAddress.AddressId}, response);

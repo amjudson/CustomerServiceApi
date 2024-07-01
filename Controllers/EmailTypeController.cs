@@ -15,7 +15,7 @@ public class EmailTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetEmailTypes")]
 	public async Task<ActionResult<ApiResponse>> GetEmailTypes()
 	{
-		response.Result = await db.EmailTypes.Where(et => !et.ClientOption).ToListAsync();
+		response.Data = await db.EmailTypes.Where(et => !et.ClientOption).ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -24,7 +24,7 @@ public class EmailTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetClientEmailTypes")]
 	public async Task<ActionResult<ApiResponse>> GetClientEmailTypes()
 	{
-		response.Result = await db.EmailTypes.Where(et => et.ClientOption).ToListAsync();
+		response.Data = await db.EmailTypes.Where(et => et.ClientOption).ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -46,7 +46,7 @@ public class EmailTypeController(ApplicationDbContext db) : ControllerBase
 			await db.EmailTypes.AddAsync(emailType);
 			await db.SaveChangesAsync();
 
-			response.Result = emailType;
+			response.Data = emailType;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.OK;
 			return Ok(response);
@@ -88,7 +88,7 @@ public class EmailTypeController(ApplicationDbContext db) : ControllerBase
 		try
 		{
 			await db.SaveChangesAsync();
-			response.Result = dbEmailType;
+			response.Data = dbEmailType;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.OK;
 			return Ok(response);

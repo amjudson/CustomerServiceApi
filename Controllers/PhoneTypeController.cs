@@ -15,7 +15,7 @@ public class PhoneTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetPhoneTypes")]
 	public async Task<ActionResult<ApiResponse>> GetPhoneTypes()
 	{
-		response.Result = await db.PhoneTypes.Where(pt => !pt.ClientOption).ToListAsync();
+		response.Data = await db.PhoneTypes.Where(pt => !pt.ClientOption).ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -24,7 +24,7 @@ public class PhoneTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetClientPhoneTypes")]
 	public async Task<ActionResult<ApiResponse>> GetClientPhoneTypes()
 	{
-		response.Result = await db.PhoneTypes.Where(pt => pt.ClientOption).ToListAsync();
+		response.Data = await db.PhoneTypes.Where(pt => pt.ClientOption).ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -46,7 +46,7 @@ public class PhoneTypeController(ApplicationDbContext db) : ControllerBase
 			await db.PhoneTypes.AddAsync(phoneType);
 			await db.SaveChangesAsync();
 
-			response.Result = phoneType;
+			response.Data = phoneType;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.OK;
 			return Ok(response);
@@ -88,7 +88,7 @@ public class PhoneTypeController(ApplicationDbContext db) : ControllerBase
 		{
 			await db.SaveChangesAsync();
 
-			response.Result = dbPhoneType;
+			response.Data = dbPhoneType;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.OK;
 			return Ok(response);

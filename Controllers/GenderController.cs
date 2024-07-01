@@ -15,7 +15,7 @@ public class GenderController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetGenders")]
 	public async Task<ActionResult<ApiResponse>> GetGenders()
 	{
-		response.Result = await db.Genders.ToListAsync();
+		response.Data = await db.Genders.ToListAsync();
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -37,7 +37,7 @@ public class GenderController(ApplicationDbContext db) : ControllerBase
 			await db.Genders.AddAsync(gender);
 			await db.SaveChangesAsync();
 
-			response.Result = gender;
+			response.Data = gender;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.OK;
 			return Ok(response);
@@ -77,7 +77,7 @@ public class GenderController(ApplicationDbContext db) : ControllerBase
 		{
 			await db.SaveChangesAsync();
 
-			response.Result = dbGender;
+			response.Data = dbGender;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.OK;
 			return Ok(response);
