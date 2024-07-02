@@ -15,7 +15,7 @@ public class PhoneController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetPhones", Name = "GetPhones")]
 	public async Task<ActionResult<ApiResponse>> GetPhones()
 	{
-		response.Data = await db.Phones.ToListAsync();
+		response.Result = await db.Phones.ToListAsync();
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -33,7 +33,7 @@ public class PhoneController(ApplicationDbContext db) : ControllerBase
 			return BadRequest(response);
 		}
 
-		response.Data = phone;
+		response.Result = phone;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
 	}
@@ -52,7 +52,7 @@ public class PhoneController(ApplicationDbContext db) : ControllerBase
 		await db.Phones.AddAsync(phone);
 		await db.SaveChangesAsync();
 
-		response.Data = phone;
+		response.Result = phone;
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -85,7 +85,7 @@ public class PhoneController(ApplicationDbContext db) : ControllerBase
 		db.Phones.Update(dbPhone);
 		await db.SaveChangesAsync();
 
-		response.Data = dbPhone;
+		response.Result = dbPhone;
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);

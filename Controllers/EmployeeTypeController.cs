@@ -15,7 +15,7 @@ public class EmployeeTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetEmployeeTypes")]
 	public async Task<ActionResult<ApiResponse>> GetEmployeeTypes()
 	{
-		response.Data = await db.EmployeeTypes.ToListAsync();
+		response.Result = await db.EmployeeTypes.ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -33,7 +33,7 @@ public class EmployeeTypeController(ApplicationDbContext db) : ControllerBase
 			return NotFound(response);
 		}
 
-		response.Data = dbEmployeeType;
+		response.Result = dbEmployeeType;
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -54,7 +54,7 @@ public class EmployeeTypeController(ApplicationDbContext db) : ControllerBase
 		{
 			await db.EmployeeTypes.AddAsync(employeeType);
 			await db.SaveChangesAsync();
-			response.Data = employeeType;
+			response.Result = employeeType;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);
@@ -95,7 +95,7 @@ public class EmployeeTypeController(ApplicationDbContext db) : ControllerBase
 		try
 		{
 			await db.SaveChangesAsync();
-			response.Data = dbEmployeeType;
+			response.Result = dbEmployeeType;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);

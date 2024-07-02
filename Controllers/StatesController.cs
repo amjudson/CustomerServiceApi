@@ -15,7 +15,7 @@ public class StatesController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetStates")]
 	public async Task<ActionResult<ApiResponse>> GetStates()
 	{
-		response.Data = await db.States.ToListAsync();
+		response.Result = await db.States.ToListAsync();
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);

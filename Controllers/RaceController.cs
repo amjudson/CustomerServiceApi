@@ -15,7 +15,7 @@ public class RaceController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetRaces")]
 	public async Task<ActionResult<ApiResponse>> GetRaces()
 	{
-		response.Data = await db.Races.ToListAsync();
+		response.Result = await db.Races.ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -33,7 +33,7 @@ public class RaceController(ApplicationDbContext db) : ControllerBase
 			return NotFound(response);
 		}
 
-		response.Data = dbRace;
+		response.Result = dbRace;
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -54,7 +54,7 @@ public class RaceController(ApplicationDbContext db) : ControllerBase
 		{
 			await db.Races.AddAsync(race);
 			await db.SaveChangesAsync();
-			response.Data = race;
+			response.Result = race;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);
@@ -93,7 +93,7 @@ public class RaceController(ApplicationDbContext db) : ControllerBase
 		try
 		{
 			await db.SaveChangesAsync();
-			response.Data = dbRace;
+			response.Result = dbRace;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);

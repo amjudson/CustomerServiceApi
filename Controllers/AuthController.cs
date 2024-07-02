@@ -32,7 +32,7 @@ public class AuthController(
 		var validPassword = await userManager.CheckPasswordAsync(userFromDb, model.Password);
 		if (!validPassword)
 		{
-			response.Data = new LoginResponseDto();
+			response.Result = new LoginResponseDto();
 			response.Success = false;
 			response.StatusCode = HttpStatusCode.BadRequest;
 			response.ErrorMessages.Add("Invalid username or password");
@@ -66,7 +66,7 @@ public class AuthController(
 
 		if (loginResponse.Email == null || string.IsNullOrEmpty(loginResponse.Token))
 		{
-			response.Data = new LoginResponseDto();
+			response.Result = new LoginResponseDto();
 			response.Success = false;
 			response.StatusCode = HttpStatusCode.BadRequest;
 			response.ErrorMessages.Add("Invalid username or password");
@@ -75,7 +75,7 @@ public class AuthController(
 
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
-		response.Data = loginResponse;
+		response.Result = loginResponse;
 		return Ok(response);
 	}
 
@@ -132,7 +132,7 @@ public class AuthController(
 						break;
 				}
 
-				response.Data = new { UserId = newUser.Id };
+				response.Result = new { UserId = newUser.Id };
 				response.StatusCode = HttpStatusCode.OK;
 				return Ok(response);
 			}

@@ -16,7 +16,7 @@ public class AddressTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetAddressTypes")]
 	public async Task<ActionResult<ApiResponse>> GetAddressTypes()
 	{
-		response.Data = await db.AddressTypes.Where(at => !at.ClientOption).ToListAsync();
+		response.Result = await db.AddressTypes.Where(at => !at.ClientOption).ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -25,7 +25,7 @@ public class AddressTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetClientAddressTypes")]
 	public async Task<ActionResult<ApiResponse>> GetClientAddressTypes()
 	{
-		response.Data = await db.AddressTypes.Where(at => at.ClientOption).ToListAsync();
+		response.Result = await db.AddressTypes.Where(at => at.ClientOption).ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -58,7 +58,7 @@ public class AddressTypeController(ApplicationDbContext db) : ControllerBase
 
 		await db.SaveChangesAsync();
 
-		response.Data = dbAddressType;
+		response.Result = dbAddressType;
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -80,7 +80,7 @@ public class AddressTypeController(ApplicationDbContext db) : ControllerBase
 			db.AddressTypes.Add(addressType);
 			await db.SaveChangesAsync();
 
-			response.Data = addressType;
+			response.Result = addressType;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.OK;
 			return Ok(response);

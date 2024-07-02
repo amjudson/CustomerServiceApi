@@ -1,6 +1,8 @@
 using CustomerServiceApi.Data;
 using CustomerServiceApi.Models;
 using CustomerServiceApi.Models.Dto;
+using CustomerServiceApi.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -13,10 +15,11 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 {
 	private readonly ApiResponse response = new();
 
+	// [Authorize]
 	[HttpGet("GetClientList", Name = "GetClientList")]
 	public async Task<ActionResult<ApiResponse>> GetClientList()
 	{
-		response.Data = await db.Clients.Where(c => c.Active).ToListAsync();
+		response.Result = await db.Clients.Where(c => c.Active).ToListAsync();
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -57,7 +60,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			.Where(a => a.ClientId == clientId)
 			.Select(a => a.Email).ToListAsync();
 
-		response.Data = clientResponse;
+		response.Result = clientResponse;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
 	}
@@ -182,7 +185,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			}
 
 			await db.SaveChangesAsync();
-			response.Data = responseClient;
+			response.Result = responseClient;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.Created;
 			return CreatedAtRoute("GetClientById", new { clientId = client.ClientId }, response);
@@ -315,7 +318,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 			}
 
 			await db.SaveChangesAsync();
-			response.Data = responseClient;
+			response.Result = responseClient;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);

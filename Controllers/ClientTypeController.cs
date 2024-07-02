@@ -15,7 +15,7 @@ public class ClientTypeController(ApplicationDbContext db) : ControllerBase
 	[HttpGet("GetClientTypes")]
 	public async Task<ActionResult<ApiResponse>> GetClientTypes()
 	{
-		response.Data = await db.ClientTypes.ToListAsync();
+		response.Result = await db.ClientTypes.ToListAsync();
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -33,7 +33,7 @@ public class ClientTypeController(ApplicationDbContext db) : ControllerBase
 			return NotFound(response);
 		}
 
-		response.Data = dbClientType;
+		response.Result = dbClientType;
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -54,7 +54,7 @@ public class ClientTypeController(ApplicationDbContext db) : ControllerBase
 		{
 			await db.ClientTypes.AddAsync(clientType);
 			await db.SaveChangesAsync();
-			response.Data = clientType;
+			response.Result = clientType;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);
@@ -93,7 +93,7 @@ public class ClientTypeController(ApplicationDbContext db) : ControllerBase
 		try
 		{
 			await db.SaveChangesAsync();
-			response.Data = clientType;
+			response.Result = clientType;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
 			return Ok(response);

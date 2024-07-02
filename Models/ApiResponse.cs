@@ -11,5 +11,5 @@ public class ApiResponse
 	public HttpStatusCode StatusCode { get; set; }
 	public bool Success { get; set; } = true;
 	public List<string> ErrorMessages { get; set; }
-	public object Data { get; set; }
+	public object Result { get; set; }
 }

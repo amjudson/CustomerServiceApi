@@ -27,7 +27,7 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 
 		Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
 
-		response.Data = await db.People
+		response.Result = await db.People
 			.Where(p =>
 				p.FirstName.ToLower().Contains(searchText.ToLower()) ||
 				p.LastName.ToLower().Contains(searchText.ToLower()) ||
@@ -78,7 +78,7 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 			.Where(a => a.PersonId == personId)
 			.Select(a => a.Email).ToListAsync();
 
-		response.Data = personResponse;
+		response.Result = personResponse;
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -194,7 +194,7 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 
 			await db.SaveChangesAsync();
 
-			response.Data = responsePersonDto;
+			response.Result = responsePersonDto;
 			response.Success = true;
 			response.StatusCode = HttpStatusCode.Created;
 			return CreatedAtRoute("GetPersonById", new {personId = person.PersonId}, response);
@@ -328,7 +328,7 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 			responsePersonDto.Person = person;
 			response.StatusCode = HttpStatusCode.OK;
 			response.Success = true;
-			response.Data = responsePersonDto;
+			response.Result = responsePersonDto;
 			return Ok(response);
 		}
 		catch (Exception e)
