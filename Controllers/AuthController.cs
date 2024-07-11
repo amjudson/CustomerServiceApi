@@ -114,6 +114,10 @@ public class AuthController(
 				{
 					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_Client_Admin));
 				}
+				if (!await roleManager.RoleExistsAsync(StaticData.Role_SuperAdmin))
+				{
+					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_SuperAdmin));
+				}
 				if (!await roleManager.RoleExistsAsync(StaticData.Role_User))
 				{
 					await roleManager.CreateAsync(new IdentityRole(StaticData.Role_User));
