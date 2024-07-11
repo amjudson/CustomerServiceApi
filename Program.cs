@@ -14,7 +14,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+	.AddEntityFrameworkStores<ApplicationDbContext>()
+	.AddDefaultTokenProviders();
+
+// USE for Email (reset password and confirm email)
+// builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+// USE for access denied callback
+// builder.Services.ConfigureApplicationCookie(o =>
+// {
+// 	o.AccessDeniedPath = "/Account/NoAccess";
+// });
 
 builder.Services.Configure<IdentityOptions>(o =>
 {
@@ -23,6 +34,9 @@ builder.Services.Configure<IdentityOptions>(o =>
 	o.Password.RequireLowercase = false;
 	o.Password.RequireUppercase = false;
 	o.Password.RequireDigit = false;
+	o.Lockout.MaxFailedAccessAttempts = 3;
+	o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+	o.SignIn.RequireConfirmedEmail = false;
 });
 
 var key = builder.Configuration["AppSettings:Secret"];
