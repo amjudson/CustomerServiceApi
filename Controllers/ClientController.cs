@@ -1,8 +1,8 @@
 using CustomerServiceApi.Data;
 using CustomerServiceApi.Models;
 using CustomerServiceApi.Models.Dto;
-using CustomerServiceApi.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -11,7 +11,9 @@ namespace CustomerServiceApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ClientController(ApplicationDbContext db) : ControllerBase
+public class ClientController(
+	ApplicationDbContext db,
+	UserManager<ApplicationUser> userManager) : ControllerBase
 {
 	private readonly ApiResponse response = new();
 
@@ -65,9 +67,11 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 		return Ok(response);
 	}
 
+	[Authorize]
 	[HttpPost("PostClient", Name = "PostClient")]
 	public async Task<ActionResult<ApiResponse>> PostClient([FromBody] ClientDto clientDto)
 	{
+		var user = await userManager.GetUserAsync(User);
 		var responseClient = new ClientDto
 		{
 			Client = new Client(),
@@ -79,6 +83,10 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 		try
 		{
 			var client = clientDto.Client;
+			client.EnteredBy = user != null
+				? user.Id
+				: "Unknown User";
+			client.CreatedDate = DateTime.UtcNow;
 			if (ModelState.IsValid)
 			{
 				await db.Clients.AddAsync(client);
@@ -199,6 +207,7 @@ public class ClientController(ApplicationDbContext db) : ControllerBase
 		}
 	}
 
+	[Authorize]
 	[HttpPut("/PutClient/{clientId:guid}", Name = "PutClient")]
 	public async Task<ActionResult<ApiResponse>> PutClient(Guid clientId, [FromBody] ClientDto clientDto)
 	{
