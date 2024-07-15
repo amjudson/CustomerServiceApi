@@ -22,24 +22,29 @@ public class UserController(
 	public async Task<ActionResult<ApiResponse>> GetUserList()
 	{
 		var users = await db.ApplicationUsers.ToListAsync();
+		var usersDtos = new List<ApplicationUserDto>();
 		foreach (var user in users)
 		{
+			var userDto = FormatApplicationUserDto(user);
+
 			var userRoles = await userManager.GetRolesAsync(user);
-			user.Roles = [];
+			userDto.Roles = [];
 			foreach (var role in userRoles)
 			{
-				user.Roles.Add(role);
+				userDto.Roles.Add(role);
 			}
 
 			var claims = await userManager.GetClaimsAsync(user);
-			user.UserClaims = [];
+			userDto.UserClaims = [];
 			foreach (var claim in claims)
 			{
-				user.UserClaims.Add(claim.Type);
+				userDto.UserClaims.Add(claim.Type);
 			}
+
+			usersDtos.Add(userDto);
 		}
 
-		response.Result = users;
+		response.Result = usersDtos.OrderBy(u => u.Email);
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return response;
@@ -57,9 +62,9 @@ public class UserController(
 			return NotFound(response);
 		}
 
-		var model = new RolesViewModel
+		var userDto = new RolesViewModel
 		{
-			User = user,
+			UserDto = FormatApplicationUserDto(user),
 		};
 
 		var existingUserRoles = await userManager.GetRolesAsync(user) as List<string>;
@@ -68,35 +73,35 @@ public class UserController(
 			var roleSelection = new RoleSelection
 			{
 				RoleName = role.Name,
-				IsSelected = existingUserRoles?.Any(r => r == role.Name) ?? false,
+				Selected = existingUserRoles?.Any(r => r == role.Name) ?? false,
 			};
 
-			model.RolesList.Add(roleSelection);
+			userDto.RolesList.Add(roleSelection);
 		}
 
-		response.Result = model;
+		response.Result = userDto;
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
 	}
 
 	[HttpPost("PostUserManageRole", Name = "PostUserManageRole")]
-	[ValidateAntiForgeryToken]
 	public async Task<ActionResult<ApiResponse>> PostUserManageRoles([FromBody] RolesViewModel rolesViewModel)
 	{
-		var user = await userManager.FindByIdAsync(rolesViewModel.User.Id);
+		var user = await userManager.FindByIdAsync(rolesViewModel.UserDto.Id);
 		if (user == null)
 		{
-			response.ErrorMessages.Add($"User '{rolesViewModel.User.Id}' not found");
+			response.ErrorMessages.Add($"User '{rolesViewModel.UserDto.Id}' not found");
 			response.Success = false;
 			response.StatusCode = HttpStatusCode.NotFound;
 			return NotFound(response);
 		}
+
 		var oldUserRoles = await userManager.GetRolesAsync(user);
 		var result = await userManager.RemoveFromRolesAsync(user, oldUserRoles);
 		if (!result.Succeeded)
 		{
-			response.ErrorMessages.Add($"Failed to remove old Roles for user '{rolesViewModel.User.Id}'.");
+			response.ErrorMessages.Add($"Failed to remove old Roles for user '{rolesViewModel.UserDto.Id}'.");
 			response.Success = false;
 			response.StatusCode = HttpStatusCode.BadRequest;
 			return BadRequest(response);
@@ -104,7 +109,7 @@ public class UserController(
 
 		result = await userManager.AddToRolesAsync(
 			user,
-			rolesViewModel.RolesList.Where(x => x.IsSelected).Select(x => x.RoleName));
+			rolesViewModel.RolesList.Where(x => x.Selected).Select(x => x.RoleName));
 
 		if (!result.Succeeded)
 		{
@@ -133,9 +138,9 @@ public class UserController(
 		}
 
 		var existingUserClaims = await userManager.GetClaimsAsync(user);
-		var model = new ClaimsViewModel
+		var userDto = new ClaimsViewModel
 		{
-			User = user,
+			UserDto = FormatApplicationUserDto(user),
 		};
 
 		foreach (var claim in ClaimStore.ClaimsList)
@@ -143,13 +148,13 @@ public class UserController(
 			var claimSelection = new ClaimSelection
 			{
 				ClaimType = claim.Type,
-				IsSelected = existingUserClaims.Any(r => r.Type == claim.Type),
+				Selected = existingUserClaims.Any(r => r.Type == claim.Type),
 			};
 
-			model.ClaimsList.Add(claimSelection);
+			userDto.ClaimsList.Add(claimSelection);
 		}
 
-		response.Result = model;
+		response.Result = userDto;
 		response.StatusCode = HttpStatusCode.OK;
 		response.Success = true;
 		return Ok(response);
@@ -158,10 +163,10 @@ public class UserController(
 	[HttpPost("PostUserManageClaims", Name = "PostUserManageClaims")]
 	public async Task<ActionResult<ApiResponse>> PostUserManageClaims([FromBody] ClaimsViewModel claimsViewModel)
 	{
-		var user = await userManager.FindByIdAsync(claimsViewModel.User.Id);
+		var user = await userManager.FindByIdAsync(claimsViewModel.UserDto.Id);
 		if (user == null)
 		{
-			response.ErrorMessages.Add($"User '{claimsViewModel.User.Id}' not found");
+			response.ErrorMessages.Add($"User '{claimsViewModel.UserDto.Id}' not found");
 			response.Success = false;
 			response.StatusCode = HttpStatusCode.NotFound;
 			return NotFound(response);
@@ -180,8 +185,8 @@ public class UserController(
 		result = await userManager.AddClaimsAsync(
 			user,
 			claimsViewModel.ClaimsList
-				.Where(x => x.IsSelected)
-				.Select(x => new Claim(x.ClaimType, x.ClaimType)));
+				.Where(x => x.Selected)
+				.Select(x => new Claim(x.ClaimType, x.Selected.ToString())));
 
 		if (!result.Succeeded)
 		{
@@ -197,7 +202,7 @@ public class UserController(
 		return Ok(response);
 	}
 
-	[HttpPost("LockUnlockUser", Name = "LockUnlockUser")]
+	[HttpPost("LockUnlockUser/{userId}", Name = "LockUnlockUser")]
 	public async Task<ActionResult<ApiResponse>> LockUnlockUser(string userId)
 	{
 		var user = await userManager.FindByIdAsync(userId);
@@ -222,7 +227,7 @@ public class UserController(
 		}
 		else
 		{
-			var result = await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(100));
+			var result = await userManager.SetLockoutEndDateAsync(user, DateTime.UtcNow.AddYears(100));
 			if (!result.Succeeded)
 			{
 				response.ErrorMessages.Add($"Failed to lock user '{user.Id}'");
@@ -232,7 +237,9 @@ public class UserController(
 			}
 		}
 
-		response.Result = user;
+		var userDto = FormatApplicationUserDto(user);
+
+		response.Result = userDto;
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
@@ -264,5 +271,21 @@ public class UserController(
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
+	}
+
+	private static ApplicationUserDto FormatApplicationUserDto(ApplicationUser user)
+	{
+		return new ApplicationUserDto
+		{
+			Id = user.Id,
+			UserName = user.UserName,
+			Email = user.Email,
+			PhoneNumber = user.PhoneNumber,
+			LastName = user.LastName,
+			FirstName = user.FirstName,
+			LockoutEnabled = user.LockoutEnabled,
+			LockoutEnd = user.LockoutEnd,
+			AccessFailedCount = user.AccessFailedCount,
+		};
 	}
 }

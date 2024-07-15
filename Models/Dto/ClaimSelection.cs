@@ -3,5 +3,5 @@
 public class ClaimSelection
 {
 	public string ClaimType { get; set; }
-	public bool IsSelected { get; set; }
+	public bool Selected { get; set; }
 }
