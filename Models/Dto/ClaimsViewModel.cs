@@ -1,6 +1,6 @@
 ﻿namespace CustomerServiceApi.Models.Dto;
-public class RolesViewModel
+public class ClaimsViewModel
 {
 	public ApplicationUserDto UserDto { get; set; }
-	public List<RoleSelection> RolesList { get; set; } = [];
+	public List<ClaimSelection> ClaimsList { get; set; } = [];
 }
