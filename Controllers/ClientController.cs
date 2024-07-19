@@ -17,7 +17,7 @@ public class ClientController(
 {
 	private readonly ApiResponse response = new();
 
-	// [Authorize]
+	[Authorize]
 	[HttpGet("GetClientList", Name = "GetClientList")]
 	public async Task<ActionResult<ApiResponse>> GetClientList()
 	{

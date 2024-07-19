@@ -22,10 +22,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 // builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 // USE for access denied callback
-// builder.Services.ConfigureApplicationCookie(o =>
-// {
-// 	o.AccessDeniedPath = "/Account/NoAccess";
-// });
+builder.Services.ConfigureApplicationCookie(o =>
+{
+	o.AccessDeniedPath = "/NoAccess";
+});
 
 builder.Services.Configure<IdentityOptions>(o =>
 {
