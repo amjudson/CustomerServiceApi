@@ -42,6 +42,8 @@ public class AuthController(
 		var roles = await userManager.GetRolesAsync(userFromDb);
 		var tokenHandler = new JwtSecurityTokenHandler();
 		var key = Encoding.ASCII.GetBytes(secretKey);
+		var claims = await userManager.GetClaimsAsync(userFromDb);
+		var claimTypes = claims.Select(c => c.Type).ToList();
 		var tokenDescriptor = new SecurityTokenDescriptor
 		{
 			Subject = new ClaimsIdentity(new []
@@ -50,7 +52,8 @@ public class AuthController(
 				new Claim("firstName", userFromDb.FirstName),
 				new Claim("id", userFromDb.Id),
 				new Claim(ClaimTypes.Email, userFromDb.UserName),
-				new Claim(ClaimTypes.Role, roles.FirstOrDefault())
+				new Claim("roles", string.Join(',', roles)),
+				new Claim("claims", string.Join(',', claimTypes)),
 			}),
 			Expires = DateTime.UtcNow.AddDays(1),
 			SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
