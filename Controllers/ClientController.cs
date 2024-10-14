@@ -18,7 +18,7 @@ public class ClientController(
 	private readonly ApiResponse response = new();
 
 	[Authorize]
-	[HttpGet("GetClientList", Name = "GetClientList")]
+	[HttpGet("[action]", Name = "GetClientList")]
 	public async Task<ActionResult<ApiResponse>> GetClientList()
 	{
 		response.Result = await db.Clients.Where(c => c.Active).ToListAsync();
@@ -27,7 +27,7 @@ public class ClientController(
 		return Ok(response);
 	}
 
-	[HttpGet("GetClientById/{clientId:guid}", Name = "GetClientById")]
+	[HttpGet("[action]/{clientId:guid}", Name = "GetClientById")]
 	public async Task<ActionResult<ApiResponse>> GetClientById(Guid clientId)
 	{
 		var client = await db.Clients.FirstOrDefaultAsync(c => c.ClientId == clientId);
@@ -68,7 +68,7 @@ public class ClientController(
 	}
 
 	[Authorize]
-	[HttpPost("PostClient", Name = "PostClient")]
+	[HttpPost("[action]", Name = "PostClient")]
 	public async Task<ActionResult<ApiResponse>> PostClient([FromBody] ClientDto clientDto)
 	{
 		var user = await userManager.GetUserAsync(User);
@@ -208,7 +208,7 @@ public class ClientController(
 	}
 
 	[Authorize]
-	[HttpPut("/PutClient/{clientId:guid}", Name = "PutClient")]
+	[HttpPut("[action]/{clientId:guid}", Name = "PutClient")]
 	public async Task<ActionResult<ApiResponse>> PutClient(Guid clientId, [FromBody] ClientDto clientDto)
 	{
 		var dbClient = await db.Clients.FirstOrDefaultAsync(c => c.ClientId == clientId);
