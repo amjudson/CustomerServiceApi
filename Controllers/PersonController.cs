@@ -14,8 +14,8 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 {
 	private readonly ApiResponse response = new();
 
-	[HttpGet("GetPeopleList", Name = "GetPeopleList")]
-	public async Task<ActionResult<ApiResponse>> GetPeopleList(string searchText = "", int pageNumber = 1, int pageSize = 5)
+	[HttpGet("GetPersonList", Name = "GetPersonList")]
+	public async Task<ActionResult<ApiResponse>> GetPersonList([FromQuery]string searchText = "", [FromQuery]int pageNumber = 1, [FromQuery]int pageSize = 5)
 	{
 		var peopleCount = await db.People.CountAsync();
 		var pagination = new Pagination
@@ -36,6 +36,37 @@ public class PersonController(ApplicationDbContext db) : ControllerBase
 			.OrderBy(p => p.LastName)
 			.Skip((pageNumber - 1) * pageSize)
 			.Take(pageSize).ToListAsync();
+
+		response.Success = true;
+		response.StatusCode = HttpStatusCode.OK;
+		return Ok(response);
+	}
+
+	[HttpGet("GetPersonListByClient/{clientId}", Name = "GetPersonListByClient")]
+	public async Task<ActionResult<ApiResponse>> GetPersonListByClient([FromRoute]Guid clientId, [FromQuery]string searchText = "", [FromQuery]int pageNumber = 1, [FromQuery]int pageSize = 5)
+	{
+		var peopleCount = await db.People.CountAsync();
+		var pagination = new Pagination
+		{
+			CurrentPage = pageNumber,
+			PageSize = pageSize,
+			TotalRecords = peopleCount,
+		};
+
+		Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
+		var peopleByClient = await db.People
+			.Where(p => p.ClientId == clientId)
+			.ToListAsync();
+
+		response.Result = peopleByClient
+			.Where(p =>
+				p.FirstName.ToLower().Contains(searchText.ToLower()) ||
+				p.LastName.ToLower().Contains(searchText.ToLower()) ||
+				p.MiddleName.ToLower().Contains(searchText.ToLower()) ||
+				p.Alias.ToLower().Contains(searchText.ToLower()))
+			.OrderBy(p => p.LastName)
+			.Skip((pageNumber - 1) * pageSize)
+			.Take(pageSize).ToList();
 
 		response.Success = true;
 		response.StatusCode = HttpStatusCode.OK;

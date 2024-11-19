@@ -20,4 +20,21 @@ public class StatesController(ApplicationDbContext db) : ControllerBase
 		response.StatusCode = HttpStatusCode.OK;
 		return Ok(response);
 	}
+
+	[HttpGet("GetStateById/{stateId}")]
+	public async Task<ActionResult<ApiResponse>> GetStatesById(int stateId)
+	{
+		response.Result = await db.States.FirstOrDefaultAsync(x => x.StateId == stateId);
+		if (response.Result == null)
+		{
+			response.Success = false;
+			response.StatusCode = HttpStatusCode.NotFound;
+			response.ErrorMessages.Add("State not found");
+			return NotFound(response);
+		}
+
+		response.Success = true;
+		response.StatusCode = HttpStatusCode.OK;
+		return Ok(response);
+	}
 }

@@ -4003,7 +4003,7 @@ namespace CustomerServiceApi.Migrations
                             Active = false,
                             ClientName = "default-client",
                             ClientTypeId = 6,
-                            CreatedDate = new DateTime(2024, 6, 26, 16, 30, 6, 742, DateTimeKind.Utc).AddTicks(482),
+                            CreatedDate = new DateTime(2024, 11, 14, 14, 33, 5, 812, DateTimeKind.Utc).AddTicks(4448),
                             EnteredBy = "system"
                         },
                         new
@@ -4012,7 +4012,7 @@ namespace CustomerServiceApi.Migrations
                             Active = true,
                             ClientName = "Awesome Resort",
                             ClientTypeId = 2,
-                            CreatedDate = new DateTime(2024, 6, 26, 16, 30, 6, 742, DateTimeKind.Utc).AddTicks(583),
+                            CreatedDate = new DateTime(2024, 11, 14, 14, 33, 5, 812, DateTimeKind.Utc).AddTicks(4542),
                             EnteredBy = "system"
                         },
                         new
@@ -4021,7 +4021,7 @@ namespace CustomerServiceApi.Migrations
                             Active = true,
                             ClientName = "Wa Wa Campgounds",
                             ClientTypeId = 6,
-                            CreatedDate = new DateTime(2024, 6, 26, 16, 30, 6, 742, DateTimeKind.Utc).AddTicks(587),
+                            CreatedDate = new DateTime(2024, 11, 14, 14, 33, 5, 812, DateTimeKind.Utc).AddTicks(4546),
                             EnteredBy = "system"
                         },
                         new
@@ -4030,7 +4030,7 @@ namespace CustomerServiceApi.Migrations
                             Active = true,
                             ClientName = "Little Ones Daycare",
                             ClientTypeId = 2,
-                            CreatedDate = new DateTime(2024, 6, 26, 16, 30, 6, 742, DateTimeKind.Utc).AddTicks(591),
+                            CreatedDate = new DateTime(2024, 11, 14, 14, 33, 5, 812, DateTimeKind.Utc).AddTicks(4550),
                             EnteredBy = "system"
                         },
                         new
@@ -4039,7 +4039,7 @@ namespace CustomerServiceApi.Migrations
                             Active = true,
                             ClientName = "Best Lawncare",
                             ClientTypeId = 7,
-                            CreatedDate = new DateTime(2024, 6, 26, 16, 30, 6, 742, DateTimeKind.Utc).AddTicks(596),
+                            CreatedDate = new DateTime(2024, 11, 14, 14, 33, 5, 812, DateTimeKind.Utc).AddTicks(4553),
                             EnteredBy = "system"
                         },
                         new
@@ -4048,7 +4048,7 @@ namespace CustomerServiceApi.Migrations
                             Active = false,
                             ClientName = "Down The Road Motel",
                             ClientTypeId = 5,
-                            CreatedDate = new DateTime(2024, 6, 26, 16, 30, 6, 742, DateTimeKind.Utc).AddTicks(599),
+                            CreatedDate = new DateTime(2024, 11, 14, 14, 33, 5, 812, DateTimeKind.Utc).AddTicks(4557),
                             EnteredBy = "system"
                         },
                         new
@@ -4057,7 +4057,7 @@ namespace CustomerServiceApi.Migrations
                             Active = true,
                             ClientName = "Testing of The Person Tracking",
                             ClientTypeId = 1,
-                            CreatedDate = new DateTime(2024, 6, 26, 16, 30, 6, 742, DateTimeKind.Utc).AddTicks(604),
+                            CreatedDate = new DateTime(2024, 11, 14, 14, 33, 5, 812, DateTimeKind.Utc).AddTicks(4561),
                             EnteredBy = "system"
                         });
                 });
@@ -22330,6 +22330,9 @@ namespace CustomerServiceApi.Migrations
                     b.Property<Guid?>("ClientId")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("ClientOption")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -22351,6 +22354,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 1,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Customer",
                             Name = "Customer"
                         },
@@ -22358,6 +22362,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 2,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Employee",
                             Name = "Employee"
                         },
@@ -22365,6 +22370,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 3,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Guardian",
                             Name = "Guardian"
                         },
@@ -22372,6 +22378,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 4,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Mother",
                             Name = "Mother"
                         },
@@ -22379,6 +22386,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 5,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Father",
                             Name = "Father"
                         },
@@ -22386,6 +22394,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 6,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Sibling",
                             Name = "Sibling"
                         },
@@ -22393,6 +22402,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 7,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Brother",
                             Name = "Brother"
                         },
@@ -22400,6 +22410,7 @@ namespace CustomerServiceApi.Migrations
                         {
                             PersonTypeId = 8,
                             ClientId = new Guid("e8094495-8504-422d-87b0-29c9baf4df7e"),
+                            ClientOption = false,
                             Description = "Sister",
                             Name = "Sister"
                         });
